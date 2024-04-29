@@ -14,6 +14,11 @@ export class SaveTimeSheetService {
   time: {
     timeIn: string;
   } = { timeIn: this.getTime() };
+  flag: {
+    flag1: boolean;
+  } = {
+    flag1: false,
+  };
 
   saveTimeSheet(
     projectId: number,
@@ -54,7 +59,7 @@ export class SaveTimeSheetService {
   getTime(): string {
     const now: Date = new Date();
     const startTime: Date = new Date();
-    startTime.setHours(9, 0, 0, 0);
+    startTime.setHours(15, 0, 0, 0);
 
     const timeDifference: number = now.getTime() - startTime.getTime();
     const hours: number = Math.floor(timeDifference / (1000 * 60 * 60));

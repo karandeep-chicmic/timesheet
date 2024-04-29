@@ -12,6 +12,7 @@ import { TimeFunctionsService } from 'src/app/Services/time-functions.service';
 })
 export class TimesheetComponent implements OnInit {
   // services
+
   coursesService = inject(CoursesService);
   saveToTimeSheetService = inject(SaveTimeSheetService);
   router = inject(Router);
@@ -27,14 +28,29 @@ export class TimesheetComponent implements OnInit {
   time: any;
   notes: string = '';
   totalTimeLeft: string = '';
+  flag: boolean = false;
 
   constructor() {}
 
   ngOnInit(): void {
     this.projects = this.coursesService.projects;
     this.time = this.saveToTimeSheetService.time.timeIn;
+
+    this.time = this.time.split(':')[0] + ':' + this.time.split(':')[1];
+    this.time = this.formatDate(this.time);
   }
 
+  formatDate(timeString: string) {
+    const [hours, minutes] = timeString.split(':');
+
+    // Convert hours and minutes to integers
+    const hoursInt = parseInt(hours, 10);
+    const minutesInt = parseInt(minutes, 10);
+
+    return `${hoursInt.toString().padStart(2, '0')}:${minutesInt
+      .toString()
+      .padStart(2, '0')}`;
+  }
   // When Project DropDown Changes
   projectChange(event: any) {
     let projectId = Number(event.target.value);
@@ -64,13 +80,27 @@ export class TimesheetComponent implements OnInit {
   }
 
   // Submit Timesheet
+
   onSubmit() {
     if (
       this.selectedMilestoneId != 0 &&
       this.selectedProjectId != 0 &&
       this.selectedTaskId != 0 &&
-      this.notes != ''
+      this.notes.trim() != '' &&
+      this.saveToTimeSheetService.flag.flag1 != true
     ) {
+      if (true) {
+        const [hours, minutes] = this.time.split(':').map(Number);
+        const date = new Date();
+        date.setHours(hours, minutes, 0, 0);
+        if (date.getHours() >= 8) {
+          alert('You Exceeded the Time!!');
+          this.time = '8:00';
+          this.saveToTimeSheetService.flag.flag1 = true;
+          this.time = this.formatDate(this.time);
+        }
+      }
+
       const prevToNow: string =
         this.saveToTimeSheetService.previousTime.prev != '00:00:00'
           ? this.timeFunctions.fromTimeToTime(
@@ -102,6 +132,8 @@ export class TimesheetComponent implements OnInit {
       this.tasks = [];
       this.notes = '';
       this.reloadTimeSheet();
+    } else if (this.saveToTimeSheetService.flag.flag1 === true) {
+      alert('You have already exceeeded 8 hours');
     } else {
       alert('All the Fields Are Required !!!');
     }
@@ -109,11 +141,20 @@ export class TimesheetComponent implements OnInit {
 
   // reload the timesheet whenever reload button is clicked
   reloadTimeSheet() {
-    this.time =
-      this.saveToTimeSheetService.previousTime.prev != '00:00:00'
-        ? this.timeFunctions.fromTimeToTime(
-            this.saveToTimeSheetService.previousTime.prev
-          )
-        : this.saveToTimeSheetService.getTime();
+    const t = this.time.split(':')[0];
+    const date = new Date();
+    date.setHours(t, 0, 0, 0);
+    console.log(date.getHours());
+
+    if (date.getHours() < 8)
+      this.time =
+        this.saveToTimeSheetService.previousTime.prev != '00:00:00'
+          ? this.timeFunctions.fromTimeToTime(
+              this.saveToTimeSheetService.previousTime.prev
+            )
+          : this.saveToTimeSheetService.getTime();
+
+    this.time = this.time.split(':')[0] + ':' + this.time.split(':')[1];
+    this.time = this.formatDate(this.time);
   }
 }

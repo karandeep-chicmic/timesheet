@@ -11,6 +11,6 @@ export class TimesheetDetailsComponent implements OnInit {
 
   data: any = [];
   ngOnInit() {
-    this.data = this.test.get().firestore;
+    this.data = this.test.getC();
   }
 }
