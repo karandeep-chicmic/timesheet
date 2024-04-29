@@ -1,0 +1,40 @@
+<table>
+  <thead>
+    <tr>
+      <th>Courses</th>
+      <th>Time Taken</th>
+      <th>notes</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let i of timeSheetEntries">
+    <tr>
+      <td>
+        <tr>
+          {{
+            "Project Name: " + projectName(i.projectId)
+          }}
+        </tr>
+        <tr>
+          {{
+            "Milestone: " + milestoneName(i.milestoneId)
+          }}
+        </tr>
+        <tr>
+          {{
+            "Task: " + taskName(i.taskId)
+          }}
+        </tr>
+      </td>
+      <td>{{ i.time }}</td>
+      <td>
+        <tr *ngFor="let j of i.notes; let index = index">
+          {{
+            index + 1 + ":- " + j
+          }}
+        </tr>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+

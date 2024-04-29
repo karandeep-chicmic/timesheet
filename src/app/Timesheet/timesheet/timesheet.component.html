@@ -1,0 +1,62 @@
+<!-- Container for Time Sheet -->
+<div class="outer-container">
+  <div class="container">
+    <!-- Item1 For DropDowns of Projects, Milestones And Tasks -->
+    <div class="item">
+      <h5>Choose Project</h5>
+      <br />
+      <label for="projects"> Project</label><br /><br />
+      <select (change)="projectChange($event)" [(ngModel)]="selectedOption">
+        <option value="" class="defaultOption" selected>Select Project</option>
+        <option *ngFor="let project of projects" [value]="project.id">
+          {{ project.name }}
+        </option></select
+      ><br /><br />
+
+      <label for="milestones"> Milestone</label><br /><br />
+      <select (change)="milestoneChange($event)">
+        <option class="defaultOption" selected>Select Milestone</option>
+        <option *ngFor="let project of milestones" [value]="project.id2">
+          {{ project.name2 }}
+        </option>
+      </select>
+
+      <br /><br />
+      <label for="task"> Task</label><br /><br />
+      <select (change)="taskChange($event)">
+        <option class="defaultOption" selected>Select Task</option>
+        <option *ngFor="let project of tasks" [value]="project.id3">
+          {{ project.name3 }}
+        </option>
+      </select>
+    </div>
+    <div class="item">
+      <!-- Input For Time Management -->
+      <div class="timeSpentHead">
+        <h5>Time Spent</h5>
+        <button class="reload" (click)="reloadTimeSheet()">⟳</button>
+        <br /><br />
+      </div>
+      <input
+        [disabled]="true"
+        name="timeSpent"
+        [(ngModel)]="this.time"
+        type="text"
+      />
+    </div>
+
+    <div class="item">
+      <!--Item for Notes  -->
+      <h5>Notes</h5>
+      <br /><br />
+      <textarea name="notes" [(ngModel)]="notes">Enter text here...</textarea>
+      <div class="btnNotes">
+        <button class="btn btn-primary" (click)="onSubmit()">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<div class="tableDisplay">
+  <app-table> </app-table>
+</div>
