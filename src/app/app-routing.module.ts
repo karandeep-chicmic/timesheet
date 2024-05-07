@@ -4,7 +4,7 @@ import { TimesheetComponent } from './Timesheet/timesheet/timesheet.component';
 import { TimesheetDetailsComponent } from './Timesheet/timesheet/timesheet-details/timesheet-details.component';
 
 const routes: Routes = [
-  // { path: '', redirectTo: 'timesheet', pathMatch: 'full' },
+  { path: '', redirectTo: 'timesheet', pathMatch: 'full' },
   {
     path: 'timesheet',
     component: TimesheetComponent,
@@ -13,6 +13,7 @@ const routes: Routes = [
     path: 'timesheetDetails',
     component: TimesheetDetailsComponent,
   },
+  { path: '**', redirectTo: 'timesheet' },
 ];
 
 @NgModule({

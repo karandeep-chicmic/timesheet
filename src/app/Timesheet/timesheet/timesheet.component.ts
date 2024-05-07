@@ -82,6 +82,7 @@ export class TimesheetComponent implements OnInit {
   // Submit Timesheet
 
   onSubmit() {
+    // check for empty fields
     if (
       this.selectedMilestoneId != 0 &&
       this.selectedProjectId != 0 &&
@@ -89,18 +90,22 @@ export class TimesheetComponent implements OnInit {
       this.notes.trim() != '' &&
       this.saveToTimeSheetService.flag.flag1 != true
     ) {
+      // check for time
       if (true) {
         const [hours, minutes] = this.time.split(':').map(Number);
         const date = new Date();
         date.setHours(hours, minutes, 0, 0);
         if (date.getHours() >= 8) {
           alert('You Exceeded the Time!!');
-          this.time = '8:00';
+          this.time = '08:00';
           this.saveToTimeSheetService.flag.flag1 = true;
-          this.time = this.formatDate(this.time);
+
+          // format time in form of 00:00
+          // this.time = this.formatDate(this.time);
         }
       }
 
+      // getting time from previous to now
       const prevToNow: string =
         this.saveToTimeSheetService.previousTime.prev != '00:00:00'
           ? this.timeFunctions.fromTimeToTime(
@@ -115,12 +120,17 @@ export class TimesheetComponent implements OnInit {
         prevToNow,
         this.notes
       );
+      console.log(this.saveToTimeSheetService.previousTime.prev);
 
       this.saveToTimeSheetService.previousTime = {
         prev: this.timeFunctions.addTime(
           this.saveToTimeSheetService.time.timeIn,
           this.saveToTimeSheetService.previousTime.prev
         ),
+      };
+
+      this.saveToTimeSheetService.time = {
+        timeIn: '00:00:00',
       };
 
       this.selectedOption = '';
@@ -131,6 +141,7 @@ export class TimesheetComponent implements OnInit {
       this.saveToTimeSheetService.time = { timeIn: '00:00:00' };
       this.tasks = [];
       this.notes = '';
+
       this.reloadTimeSheet();
     } else if (this.saveToTimeSheetService.flag.flag1 === true) {
       alert('You have already exceeeded 8 hours');

@@ -49,6 +49,7 @@ export class TimeFunctionsService {
 
   fromTimeToTime(prev: string) {
     prev = this.addTime(prev, '9:00:00');
+
     const [hours1, minutes2, seconds3]: number[] = prev.split(':').map(Number);
 
     const dateWithTime: Date = new Date();
